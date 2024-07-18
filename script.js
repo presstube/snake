@@ -34,7 +34,10 @@ window.onload = function () {
     enemyGrid = createGrid(enemyGridWidth, enemyGridHeight);
     for (let x = 0; x < enemyGridWidth; x++) {
       for (let y = 0; y < enemyGridHeight; y++) {
-        if (Math.abs(playerX - x) > 10 || Math.abs(playerY - y) > 10) {
+        if (
+          (Math.abs(playerX - x) > 10 || Math.abs(playerY - y) > 10) &&
+          (Math.abs(foodX - x) > 10 || Math.abs(foodY - y) > 10)
+        ) {
           enemyGrid[x][y] = Math.random() < enemyProbability ? 1 : 0; // Probability of enemy cells being alive
         }
       }
