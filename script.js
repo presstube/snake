@@ -10,6 +10,14 @@ window.onload = function () {
   let playerX = 0;
   let playerY = 0;
 
+  // Key state
+  const keys = {
+    ArrowUp: false,
+    ArrowDown: false,
+    ArrowLeft: false,
+    ArrowRight: false,
+  };
+
   // Get the device pixel ratio, falling back to 1
   const dpr = window.devicePixelRatio || 1;
 
@@ -54,9 +62,11 @@ window.onload = function () {
   }
 
   // Function to move the player
-  function movePlayer(dx, dy) {
-    playerX += dx;
-    playerY += dy;
+  function movePlayer() {
+    if (keys.ArrowUp) playerY -= 1;
+    if (keys.ArrowDown) playerY += 1;
+    if (keys.ArrowLeft) playerX -= 1;
+    if (keys.ArrowRight) playerX += 1;
 
     // Ensure player stays within bounds
     if (playerX < 0) playerX = 0;
@@ -65,28 +75,29 @@ window.onload = function () {
       playerX = canvas.width / dpr / gridSize - 1;
     if (playerY >= canvas.height / dpr / gridSize)
       playerY = canvas.height / dpr / gridSize - 1;
-
-    draw();
   }
 
-  // Event listener for key presses
+  // Animation loop
+  function update() {
+    movePlayer();
+    draw();
+    requestAnimationFrame(update);
+  }
+
+  // Event listeners for key down and up
   window.addEventListener("keydown", function (event) {
-    switch (event.key) {
-      case "ArrowUp":
-        movePlayer(0, -1);
-        break;
-      case "ArrowDown":
-        movePlayer(0, 1);
-        break;
-      case "ArrowLeft":
-        movePlayer(-1, 0);
-        break;
-      case "ArrowRight":
-        movePlayer(1, 0);
-        break;
+    if (keys.hasOwnProperty(event.key)) {
+      keys[event.key] = true;
     }
   });
 
-  // Initial draw
+  window.addEventListener("keyup", function (event) {
+    if (keys.hasOwnProperty(event.key)) {
+      keys[event.key] = false;
+    }
+  });
+
+  // Initial draw and start the animation loop
   draw();
+  requestAnimationFrame(update);
 };
