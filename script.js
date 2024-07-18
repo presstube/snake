@@ -1,7 +1,8 @@
+import { startMusic, stopMusic, startRandomMusic } from "./src/sound.js";
 window.onload = function () {
   const canvas = document.getElementById("gridCanvas");
   const ctx = canvas.getContext("2d");
-  const gridSize = 10;
+  const gridSize = 20;
   const gridColor = "#555";
   const backgroundColor = "#222";
   const playerColor = "blue";
@@ -148,6 +149,7 @@ window.onload = function () {
       fps += 1;
       frameDuration = 1000 / fps;
       initializeEnemyGrid();
+      resetMusic();
     } else {
       // Move the player's body
       playerBody.push({ x: playerX, y: playerY });
@@ -216,6 +218,7 @@ window.onload = function () {
     fps = 10; // Reset FPS
     frameDuration = 1000 / fps;
     initializeEnemyGrid();
+    resetMusic();
     console.log("Game reset");
   }
 
@@ -269,7 +272,16 @@ window.onload = function () {
     requestAnimationFrame(update);
   }
 
-  // Initial draw and start the animation loop
-  draw();
-  requestAnimationFrame(update);
+  function resetMusic() {
+    stopMusic();
+    startRandomMusic(fps);
+  }
+
+  document.addEventListener("click", () => {
+    // Initial draw and start the animation loop
+    draw();
+    requestAnimationFrame(update);
+    console.log("click");
+    resetMusic();
+  });
 };
